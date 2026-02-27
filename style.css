@@ -203,21 +203,7 @@ body {
     overflow: hidden;
 }
 
-.blob-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 280px;
-    z-index: 1;
-}
 
-.blob-footer {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 280px;
-    z-index: 1;
-}
 
 /* Inner content container */
 .invoice-inner {
