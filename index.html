@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Cicilan - Perigigi</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div class="login-screen" id="login-screen">
+        <div class="login-box">
+            <img src="Assets/00 - Logo - Diedit.png" alt="Perigigi" class="login-logo">
+            <h2>Invoice System</h2>
+            <p>Masukkan password untuk melanjutkan</p>
+            <input type="password" id="password-input" placeholder="Password" onkeypress="handleEnter(event)">
+            <button onclick="checkPassword()">Masuk</button>
+            <p class="login-error" id="login-error"></p>
+        </div>
+    </div>
+
+    <!-- MAIN APP (Hidden until login) -->
+    <div class="app-container" id="app-container" style="display: none;">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h3>📋 Riwayat Invoice</h3>
+            <div id="history-list"></div>
+            <button class="btn-clear" onclick="clearHistory()">🗑️ Hapus Semua</button>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+            <div class="toolbar">
+                <button class="btn btn-new" onclick="resetForm()">+ Invoice Baru</button>
+                <button class="btn btn-save" onclick="saveInvoice()">💾 Simpan</button>
+                <button class="btn btn-pdf" onclick="downloadPDF()">📥 Download PDF</button>
+            </div>
+
+            <!-- INVOICE -->
+            <div class="invoice" id="invoice">
+                <!-- Header Blob -->
+                <img src="Assets/3.png" class="blob-header" alt="">
+                
+                <!-- Footer Blob -->
+                <img src="Assets/4.png" class="blob-footer" alt="">
+
+                <!-- Content -->
+                <div class="invoice-inner">
+                    <!-- Top Row: Logo + Invoice Info -->
+                    <div class="top-row">
+                        <div class="logo-wrap">
+                            <img src="Assets/00 - Logo - Diedit.png" class="logo" alt="Perigigi">
+                        </div>
+                        <div class="header-right">
+                            <h1 class="title">INVOICE</h1>
+                            <div class="info-box">
+                                <div class="info-row">
+                                    <span>No. Invoice</span>
+                                    <input type="text" id="no-invoice">
+                                </div>
+                                <div class="info-row">
+                                    <span>Tanggal</span>
+                                    <input type="date" id="tanggal">
+                                </div>
+                                <div class="info-row">
+                                    <span>Tgl. Jatuh Tempo</span>
+                                    <input type="date" id="jatuh-tempo">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tagihan Kepada -->
+                    <div class="billing">
+                        <p class="billing-title">Tagihan Kepada</p>
+                        <div class="billing-row">
+                            <span>Nama Pasien</span>
+                            <span>:</span>
+                            <input type="text" id="nama-pasien">
+                        </div>
+                        <div class="billing-row">
+                            <span>No. Registrasi</span>
+                            <span>:</span>
+                            <input type="text" id="no-registrasi">
+                        </div>
+                        <div class="billing-row">
+                            <span>No. MR</span>
+                            <span>:</span>
+                            <input type="text" id="no-mr">
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="table-wrap">
+                        <div class="table-header">
+                            <div class="col-ket">Keterangan</div>
+                            <div class="col-jml">Jumlah</div>
+                            <div class="col-sub">Subtotal</div>
+                        </div>
+                        <div class="table-body" id="table-body">
+                            <div class="table-row">
+                                <div class="col-ket"><textarea class="inp-ket" rows="1" oninput="autoResize(this)"></textarea></div>
+                                <div class="col-jml"><input type="number" class="inp-jml" value="1" min="1"></div>
+                                <div class="col-sub"><input type="text" class="inp-sub" oninput="formatCurrency(this); calculateTotal()"></div>
+                                <button class="btn-del no-print" onclick="removeRow(this)">×</button>
+                            </div>
+                            <div class="table-row">
+                                <div class="col-ket"><textarea class="inp-ket" rows="1" oninput="autoResize(this)"></textarea></div>
+                                <div class="col-jml"><input type="number" class="inp-jml" value="1" min="1"></div>
+                                <div class="col-sub"><input type="text" class="inp-sub" oninput="formatCurrency(this); calculateTotal()"></div>
+                                <button class="btn-del no-print" onclick="removeRow(this)">×</button>
+                            </div>
+                            <div class="table-row">
+                                <div class="col-ket"><textarea class="inp-ket" rows="1" oninput="autoResize(this)"></textarea></div>
+                                <div class="col-jml"><input type="number" class="inp-jml" value="1" min="1"></div>
+                                <div class="col-sub"><input type="text" class="inp-sub" oninput="formatCurrency(this); calculateTotal()"></div>
+                                <button class="btn-del no-print" onclick="removeRow(this)">×</button>
+                            </div>
+                        </div>
+                        <button class="btn-add no-print" onclick="addRow()">+ Tambah Treatment</button>
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="divider"></div>
+
+                    <!-- Total Section -->
+                    <div class="total-section">
+                        <div class="total-box">
+                            <span class="total-lbl">Total</span>
+                            <span class="total-colon">:</span>
+                            <span class="total-val" id="total-display"></span>
+                        </div>
+                        <div class="payment-row">
+                            <span class="pay-lbl">Pembayaran<br>Diterima</span>
+                            <span class="pay-colon">:</span>
+                            <input type="text" id="pembayaran" class="pay-input" oninput="formatCurrency(this); calculateSisa()">
+                        </div>
+                        <div class="payment-row">
+                            <span class="pay-lbl">Sisa Tagihan</span>
+                            <span class="pay-colon">:</span>
+                            <span class="sisa-val" id="sisa-display"></span>
+                        </div>
+                    </div>
+
+                    <!-- Note -->
+                    <div class="note">
+                        <p class="note-title">Note</p>
+                        <p>Silahkan transfer ke rekening :</p>
+                        <p>Mandiri 1640011023233</p>
+                        <p>atau BCA 6800699558</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div> <!-- End app-container -->
+
+    <script src="script.js"></script>
+</body>
+</html>

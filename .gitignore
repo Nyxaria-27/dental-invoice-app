@@ -1,0 +1,43 @@
+# ==================== SENSITIVE FILES ====================
+# Jangan upload file yang berisi password/API keys
+# script.js berisi password dan URL - HATI-HATI!
+
+# ==================== SYSTEM FILES ====================
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# ==================== IDE / EDITOR ====================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+
+# ==================== LOCAL DEV FILES ====================
+START.bat
+PANDUAN.md
+
+# ==================== LOGS ====================
+*.log
+npm-debug.log*
+
+# ==================== TEMPORARY ====================
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# ==================== OPTIONAL: EXCLUDE APPS SCRIPT ====================
+# Uncomment jika tidak ingin upload folder Google Apps Script
+# Google Apps Script/
