@@ -192,6 +192,8 @@ body {
 .btn-save:hover { background: #43a047; }
 .btn-pdf { background: #9c27b0; color: #fff; }
 .btn-pdf:hover { background: #8e24aa; }
+.btn-sheet { background: #0f9d58; color: #fff; text-decoration: none; display: inline-flex; align-items: center; }
+.btn-sheet:hover { background: #0b8043; }
 
 /* INVOICE - Fixed A4 size */
 .invoice {
