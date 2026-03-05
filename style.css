@@ -542,15 +542,15 @@ body {
 
 .note-title {
     font-weight: 700;
-    font-size: 15px;
+    font-size: 16px;
     color: #333;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 .note p {
-    font-size: 13px;
+    font-size: 14px;
     color: #333;
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 /* PRINT & PDF MODE */
